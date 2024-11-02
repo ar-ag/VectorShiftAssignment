@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
-import { Position } from 'reactflow';
+import { Position, useUpdateNodeInternals } from 'reactflow';
 import { AbstractNode } from '../components/abstractNode';
 
 export const TextNode = ({ id, data }) => {
-  const [currText, setCurrText] = useState(data?.text || '{{input}}');
+  const updateNodeInternals = useUpdateNodeInternals();
+  const [currText, setCurrText] = useState(data?.text || '');
   const [dimensions, setDimensions] = useState({ width: 200, height: 150 });
-  const [textHeight, setTextHeight] = useState(0); // State to track scrollHeight of input box
+  const [detectedVariables, setDetectedVariables] = useState([]); 
   const inputRef = useRef(null);
   const margin = 10;
 
@@ -14,23 +15,24 @@ export const TextNode = ({ id, data }) => {
   };
 
   useEffect(() => {
+    const variableRegex = /{{\s*([a-zA-Z_$][0-9a-zA-Z_$]*)\s*}}/g;
+    const matches = Array.from(currText.matchAll(variableRegex), match => match[1]);
+    setDetectedVariables(matches);
+    updateNodeInternals(id);
+  }, [currText]);
+
+  useEffect(() => {
     if (inputRef.current) {
       const textLength = currText.length;
       const newWidth = Math.max(200, textLength * 4);
-      const newHeight = Math.max(150, textHeight * 2.4); // Adjust node height based on textHeight
+      const newHeight = Math.max(150, textLength * 4);
 
       setDimensions({
         width: newWidth,
         height: newHeight,
       });
     }
-  }, [currText, textHeight]);
-
-  const handleInput = (e) => {
-    e.target.style.height = 'auto';
-    e.target.style.height = `${e.target.scrollHeight}px`;
-    setTextHeight(e.target.scrollHeight); // Update textHeight with scrollHeight
-  };
+  }, [currText]);
 
   return (
     <AbstractNode 
@@ -38,7 +40,13 @@ export const TextNode = ({ id, data }) => {
       width={dimensions.width}
       height={dimensions.height}
       handleConfig={[
-        { type: 'source', position: Position.Right, id: 'output' }
+        { type: 'source', position: Position.Right, id: `output` },
+        ...detectedVariables.map((variable, index) => ({
+          type: 'target',
+          position: Position.Left,
+          id: `${variable}`,  // Unique id for each handle based on node id and variable name
+          top: `${(index + 1) * 20}%`
+        }))
       ]}
     >
       <div style={{ width: '100%', height: '100%', padding: margin }}>
@@ -50,7 +58,6 @@ export const TextNode = ({ id, data }) => {
               ref={inputRef}
               value={currText} 
               onChange={handleTextChange} 
-              onInput={handleInput} // Track input changes to adjust scrollHeight
               style={{ 
                 width: `calc(100% - ${margin * 2}px)`,
                 height: 'auto',
@@ -60,6 +67,10 @@ export const TextNode = ({ id, data }) => {
                 overflow: 'hidden'
               }}
               rows={1}
+              onInput={(e) => {
+                e.target.style.height = 'auto';
+                e.target.style.height = `${e.target.scrollHeight}px`;
+              }}
             />
           </label>
         </div>
