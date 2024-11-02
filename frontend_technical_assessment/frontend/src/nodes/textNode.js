@@ -4,9 +4,10 @@ import { AbstractNode } from '../components/abstractNode';
 
 export const TextNode = ({ id, data }) => {
   const [currText, setCurrText] = useState(data?.text || '{{input}}');
-  const [dimensions, setDimensions] = useState({ width: 200, height: 150 }); // Start with a 4:3 ratio (200x150)
+  const [dimensions, setDimensions] = useState({ width: 200, height: 150 });
+  const [textHeight, setTextHeight] = useState(0); // State to track scrollHeight of input box
   const inputRef = useRef(null);
-  const margin = 10; // Margin around the input box
+  const margin = 10;
 
   const handleTextChange = (e) => {
     setCurrText(e.target.value);
@@ -14,19 +15,22 @@ export const TextNode = ({ id, data }) => {
 
   useEffect(() => {
     if (inputRef.current) {
-      // Calculate width based on text length, set a minimum width of 200
       const textLength = currText.length;
-      const newWidth = Math.max(200, textLength * 4);  // Adjust multiplier to control width growth
-
-      // Update height based on the scrollHeight of the textarea
-      const newHeight = Math.max(150, textLength * 4); // +2*margin for padding
+      const newWidth = Math.max(200, textLength * 4);
+      const newHeight = Math.max(150, textHeight * 2.4); // Adjust node height based on textHeight
 
       setDimensions({
         width: newWidth,
         height: newHeight,
       });
     }
-  }, [currText]);
+  }, [currText, textHeight]);
+
+  const handleInput = (e) => {
+    e.target.style.height = 'auto';
+    e.target.style.height = `${e.target.scrollHeight}px`;
+    setTextHeight(e.target.scrollHeight); // Update textHeight with scrollHeight
+  };
 
   return (
     <AbstractNode 
@@ -46,19 +50,16 @@ export const TextNode = ({ id, data }) => {
               ref={inputRef}
               value={currText} 
               onChange={handleTextChange} 
+              onInput={handleInput} // Track input changes to adjust scrollHeight
               style={{ 
-                width: `calc(100% - ${margin * 2}px)`,  // Subtract margin from width
-                height: 'auto', // Set height to auto to allow dynamic resizing
-                margin: margin,  // Apply margin to all sides
-                boxSizing: 'border-box', // Ensure padding/margin is included in width/height
-                resize: 'none', // Prevent manual resizing
-                overflow: 'hidden' // Hide overflow
+                width: `calc(100% - ${margin * 2}px)`,
+                height: 'auto',
+                margin: margin,
+                boxSizing: 'border-box',
+                resize: 'none',
+                overflow: 'hidden'
               }}
-              rows={1} // Set initial row count
-              onInput={(e) => {
-                e.target.style.height = 'auto'; // Reset height
-                e.target.style.height = `${e.target.scrollHeight}px`; // Update height based on scrollHeight
-              }}
+              rows={1}
             />
           </label>
         </div>
