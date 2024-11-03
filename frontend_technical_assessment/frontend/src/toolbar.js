@@ -18,8 +18,8 @@ export const PipelineToolbar = () => {
                 <DraggableNode type="llm" label="LLM" icon={<PiGraphBold />} />
                 <DraggableNode type="customOutput" label="Output" icon={<MdOutlineOutput />} />
                 <DraggableNode type="text" label="Text" icon={<BsFileText />} />
-                <DraggableNode type="test1" label="Test1" icon={<CiStickyNote />} />
-                <DraggableNode type="test2" label="Test2" icon={<SiGitconnected />}/>
+                <DraggableNode type="test1" label="Test1" icon={<SiGitconnected />} />
+                <DraggableNode type="test2" label="Test2" icon={<CiStickyNote />}/>
                 <DraggableNode type="test3" label="Test3" icon={<RiCheckboxMultipleBlankLine />} />
                 <DraggableNode type="test4" label="Test4" icon={<LuShapes />}/>
                 <DraggableNode type="test5" label="Test5" icon={<HiOutlineMail />} />

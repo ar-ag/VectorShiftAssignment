@@ -12,7 +12,7 @@ export const TestNode5 = ({ id }) => {
     <AbstractNode
       id={id}
       title="TestNode5"
-      color='blue'
+      textColor='text-blue-500'
       handleConfig={[
         { type: 'target', position: Position.Left, id: 'system', onConnect: handleConnect },
         { type: 'source', position: Position.Right, id: 'prompt', onConnect: handleConnect },

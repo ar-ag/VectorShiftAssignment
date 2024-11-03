@@ -1,35 +1,41 @@
 // llmNode.js
 
-import { Handle, Position } from 'reactflow';
+import { Position } from 'reactflow';
+import { AbstractNode } from '../components/abstractNode';
 
 export const LLMNode = ({ id, data }) => {
+  // Define handle configuration for the LLM node
+  const handleConfig = [
+    {
+      id: 'system',
+      type: 'target',
+      position: Position.Left,
+      top: `${100 / 3}%`
+    },
+    {
+      id: 'prompt',
+      type: 'target',
+      position: Position.Left,
+      top: `${200 / 3}%`
+    },
+    {
+      id: 'response',
+      type: 'source',
+      position: Position.Right,
+      top: '50%'
+    }
+  ];
 
   return (
-    <div style={{width: 200, height: 80, border: '1px solid black'}}>
-      <Handle
-        type="target"
-        position={Position.Left}
-        id={`${id}-system`}
-        style={{top: `${100/3}%`}}
-      />
-      <Handle
-        type="target"
-        position={Position.Left}
-        id={`${id}-prompt`}
-        style={{top: `${200/3}%`}}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        id={`${id}-response`}
-      />
-      <div>
-        <span>LLM</span>
-      </div>
-      <div>
-        <span>This is a LLM.</span>
-      </div>
-      
-    </div>
+    <AbstractNode
+      id={id}
+      title="LLM"
+      width={200}
+      height={80}
+      border="1px solid black"
+      handleConfig={handleConfig}
+    >
+      <div>This is a LLM.</div>
+    </AbstractNode>
   );
-}
+};

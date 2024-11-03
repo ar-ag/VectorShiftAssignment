@@ -20,7 +20,8 @@ export const TestNode4 = ({ id, data }) => {
   return (
     <AbstractNode
       id={id}
-      width={300}
+      border="border-rose-500"
+      shadow="shadow-rose-800"
       title="TestNode4"
       handleConfig={[
         { type: 'target', position: Position.Left, id: 'system', onConnect: handleConnect },
@@ -28,7 +29,7 @@ export const TestNode4 = ({ id, data }) => {
       ]}
     >
       <div>
-        <span>This is a TestNode4 with custom children</span>
+        <span>This is a TestNode4 with custom border</span>
 
       </div>
       <div>

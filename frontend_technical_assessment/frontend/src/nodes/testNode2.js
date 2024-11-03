@@ -2,27 +2,29 @@
 
 import { AbstractNode } from '../components/abstractNode';
 import { Handle, Position } from 'reactflow';
+import { useState } from 'react';
 
 export const TestNode2 = ({ id }) => {
+    const [text, setText] = useState(''); // State for the input text
+
     const handleConnect = (params) => {
-        console.log(`i am connected ${params}`)
-    }
-    
-  return (
-    <AbstractNode
-      id={id}
-      title="TestNode2"
-      border="2px dashed blue"
-      width={200}
-      height={80}
-      handleConfig={[
-        { type: 'target', position: Position.Left, id: 'system', onConnect: handleConnect },
-        { type: 'source', position: Position.Right, id: 'prompt', onConnect: handleConnect },
-      ]}
-    >
-      <div>
-        <span>This is a TestNode2 with custom border</span>
-      </div>
-    </AbstractNode>
-  );
+        console.log(`I am connected ${params}`);
+    };
+
+    return (
+        <AbstractNode
+            id={id}
+            handleConfig={[{ id: 'value', type: 'source', position: Position.Right }]} // Optional handle configuration
+            bgColor='bg-yellow-100'
+        >
+            <div className="p-4">
+                <textarea
+                    className="bg-transparent w-full h-full resize-none outline-none"
+                    placeholder="Type your note here..."
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                />
+            </div>
+        </AbstractNode>
+    );
 };

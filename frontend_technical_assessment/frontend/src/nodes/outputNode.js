@@ -1,12 +1,15 @@
 // outputNode.js
 
 import { useState } from 'react';
-import { Handle, Position } from 'reactflow';
+import { Position } from 'reactflow';
+import { AbstractNode } from '../components/abstractNode';
 
 export const OutputNode = ({ id, data }) => {
+  // State to track the current name and output type
   const [currName, setCurrName] = useState(data?.outputName || id.replace('customOutput-', 'output_'));
   const [outputType, setOutputType] = useState(data.outputType || 'Text');
 
+  // Handlers for input changes
   const handleNameChange = (e) => {
     setCurrName(e.target.value);
   };
@@ -15,16 +18,26 @@ export const OutputNode = ({ id, data }) => {
     setOutputType(e.target.value);
   };
 
+  // Define handle configuration for the output node
+  const handleConfig = [
+    {
+      id: 'value',
+      type: 'target',
+      position: Position.Left,
+      top: '50%' // Center the handle vertically
+    }
+  ];
+
   return (
-    <div style={{width: 200, height: 80, border: '1px solid black'}}>
-      <Handle
-        type="target"
-        position={Position.Left}
-        id={`${id}-value`}
-      />
-      <div>
-        <span>Output</span>
-      </div>
+    <AbstractNode
+      id={id}
+      title="Output"
+      width={200}
+      height={120} // Adjusted height to accommodate input fields
+      border="1px solid black"
+      handleConfig={handleConfig}
+    >
+      {/* Children elements with input fields for name and type */}
       <div>
         <label>
           Name:
@@ -34,14 +47,16 @@ export const OutputNode = ({ id, data }) => {
             onChange={handleNameChange} 
           />
         </label>
+      </div>
+      <div>
         <label>
           Type:
           <select value={outputType} onChange={handleTypeChange}>
             <option value="Text">Text</option>
-            <option value="File">Image</option>
+            <option value="Image">Image</option>
           </select>
         </label>
       </div>
-    </div>
+    </AbstractNode>
   );
-}
+};

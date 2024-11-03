@@ -18,8 +18,7 @@ export const TestNode1 = ({ id }) => {
     <AbstractNode
       id={id}
       title="Test1"
-      width={200}
-      height={80}
+
       handleConfig={[
         { type: 'target', position: Position.Left, id: 'system', top: '33%', onConnect: handleConnect, isValidConnection: handleValidConnection },
         { type: 'target', position: Position.Left, id: 'prompt', top: '66%', onConnect: handleConnect, isValidConnection: handleValidConnection },
