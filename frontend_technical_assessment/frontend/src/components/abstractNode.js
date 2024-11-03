@@ -1,3 +1,4 @@
+
 // AbstractNode.js
 
 import { Handle, useUpdateNodeInternals } from 'reactflow';
@@ -34,3 +35,5 @@ export const AbstractNode = ({ id, color = 'black', width = 200, height = 80, ti
     </div>
   );
 };
+
+
